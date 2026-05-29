@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVD Geometry Visualizer</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>SVD Geometry Visualizer</h1>
+
+    <p>
+        Visualize how a matrix transforms the unit circle through
+        Singular Value Decomposition.
+    </p>
+
+    <div class="matrix-input">
+
+        <input id="a" value="3">
+        <input id="b" value="1">
+
+        <br>
+
+        <input id="c" value="1">
+        <input id="d" value="2">
+
+    </div>
+
+    <button id="computeBtn">
+        Compute SVD
+    </button>
+
+    <canvas id="canvas" width="800" height="800"></canvas>
+
+    <div class="output">
+
+        <h2>SVD Decomposition</h2>
+
+        <pre id="svdOutput"></pre>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
