@@ -1,52 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVD Geometry Visualizer</title>
 
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+<title>SVD Geometry Visualizer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+
 </head>
+
 <body>
 
-<div class="container">
+<header>
 
-    <h1>SVD Geometry Visualizer</h1>
+<div class="logo">
+SVD Geometry Visualizer
+</div>
 
-    <p>
-        Visualize how a matrix transforms the unit circle through
-        Singular Value Decomposition.
-    </p>
+<button id="themeBtn">
+🌙
+</button>
 
-    <div class="matrix-input">
+</header>
 
-        <input id="a" value="3">
-        <input id="b" value="1">
+<section class="hero">
 
-        <br>
+<h1>
+Visualize Singular Value Decomposition
+</h1>
 
-        <input id="c" value="1">
-        <input id="d" value="2">
+<p>
+Explore how matrices rotate, stretch and transform space through SVD.
+</p>
 
-    </div>
+</section>
 
-    <button id="computeBtn">
-        Compute SVD
-    </button>
+<div class="main-grid">
 
-    <canvas id="canvas" width="800" height="800"></canvas>
+<div class="sidebar">
 
-    <div class="output">
+<div class="panel">
 
-        <h2>SVD Decomposition</h2>
+<h3>Matrix A</h3>
 
-        <pre id="svdOutput"></pre>
+<div class="matrix-grid">
 
-    </div>
+<input id="a" value="3">
+<input id="b" value="1">
+
+<input id="c" value="1">
+<input id="d" value="2">
 
 </div>
+
+</div>
+
+<div class="panel">
+
+<h3>Presets</h3>
+
+<div class="preset-grid">
+
+<button data-preset="stretch">
+Stretch
+</button>
+
+<button data-preset="rotation">
+Rotation
+</button>
+
+<button data-preset="shear">
+Shear
+</button>
+
+<button data-preset="reflection">
+Reflect
+</button>
+
+<button data-preset="random">
+Random
+</button>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>Animation</h3>
+
+<input
+id="stageSlider"
+type="range"
+min="0"
+max="3"
+step="0.01"
+value="3"
+>
+
+<div class="animation-buttons">
+
+<button id="playBtn">
+▶ Play
+</button>
+
+<button id="resetBtn">
+↺ Reset
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="visualization">
+
+<canvas
+id="canvas"
+width="1000"
+height="700">
+</canvas>
+
+<div class="stage-label">
+
+<span id="stageText">
+Final Transformation
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<section class="cards">
+
+<div class="card">
+
+<h3>U</h3>
+
+<pre id="uCard"></pre>
+
+</div>
+
+<div class="card">
+
+<h3>Σ</h3>
+
+<pre id="sCard"></pre>
+
+</div>
+
+<div class="card">
+
+<h3>Vᵀ</h3>
+
+<pre id="vCard"></pre>
+
+</div>
+
+</section>
+
+<section class="bars-card">
+
+<h2>Singular Values</h2>
+
+<div id="bars"></div>
+
+</section>
+
+<section class="explanation-card">
+
+<h2>What is happening?</h2>
+
+<p id="explanation"></p>
+
+</section>
 
 <script src="script.js"></script>
 
