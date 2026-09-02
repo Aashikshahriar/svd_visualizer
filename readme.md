@@ -1,6 +1,7 @@
 # SVD Geometry Visualizer
 
 > An interactive visual journey through one of the most beautiful ideas in linear algebra.
+> Live demo: https://aashikshahriar.github.io/svd_visualizer/
 
 ## What if every matrix was telling a story?
 
