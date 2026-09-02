@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Interactive Singular Value Decomposition visualizer: explore 2D matrix geometry, decompose custom matrices, and compress images with SVD in your browser.">
+<meta name="theme-color" content="#0a0c14">
 
-<title>SVD Geometry Visualizer</title>
+<title>SVD Studio — Interactive Singular Value Decomposition</title>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Ctext x='50' y='63' font-size='42' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3E%CE%A3%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 
@@ -24,171 +26,300 @@
 <header>
 
 <div class="logo">
-SVD Geometry Visualizer
+<div class="logo-mark">Σ</div>
+<span class="logo-text">SVD Studio</span>
 </div>
 
-<button id="themeBtn">
-🌙
-</button>
+<div class="header-actions">
+<a class="gh-link" href="https://github.com/Aashikshahriar/svd_visualizer" target="_blank" rel="noopener">
+<button class="icon-btn" title="View source on GitHub" type="button">★</button>
+</a>
+<button id="themeBtn" class="icon-btn" title="Toggle theme" type="button">🌙</button>
+</div>
 
 </header>
 
 <section class="hero">
-
-<h1>
-Visualize Singular Value Decomposition
-</h1>
-
-<p>
-Explore how matrices rotate, stretch and transform space through SVD.
-</p>
-
+<h1>Visualize Singular Value Decomposition</h1>
+<p>See how matrices rotate and stretch space, explore SVD on any matrix, and compress real images — all live in your browser.</p>
 </section>
+
+<nav class="tabbar" role="tablist" aria-label="SVD demos">
+<button class="tab-btn active" data-tab="geometry" role="tab" aria-selected="true" type="button">📐 2D Geometry</button>
+<button class="tab-btn" data-tab="matrix" role="tab" aria-selected="false" type="button">🧮 Matrix Lab</button>
+<button class="tab-btn" data-tab="image" role="tab" aria-selected="false" type="button">🖼️ Image Compression</button>
+</nav>
+
+<main>
+
+<!-- ================= TAB 1: GEOMETRY ================= -->
+<section id="tab-geometry" class="tab-panel active">
 
 <div class="main-grid">
 
 <div class="sidebar">
 
 <div class="panel">
-
 <h3>Matrix A</h3>
-
 <div class="matrix-grid">
-
-<input id="a" value="3">
-<input id="b" value="1">
-
-<input id="c" value="1">
-<input id="d" value="2">
-
+<input id="a" class="mtx-input" value="3" inputmode="decimal">
+<input id="b" class="mtx-input" value="1" inputmode="decimal">
+<input id="c" class="mtx-input" value="1" inputmode="decimal">
+<input id="d" class="mtx-input" value="2" inputmode="decimal">
 </div>
-
 </div>
 
 <div class="panel">
-
 <h3>Presets</h3>
-
 <div class="preset-grid">
-
-<button data-preset="stretch">
-Stretch
-</button>
-
-<button data-preset="rotation">
-Rotation
-</button>
-
-<button data-preset="shear">
-Shear
-</button>
-
-<button data-preset="reflection">
-Reflect
-</button>
-
-<button data-preset="random">
-Random
-</button>
-
+<button class="btn" data-preset="stretch" type="button">Stretch</button>
+<button class="btn" data-preset="rotation" type="button">Rotation</button>
+<button class="btn" data-preset="shear" type="button">Shear</button>
+<button class="btn" data-preset="reflection" type="button">Reflect</button>
+<button class="btn" data-preset="singular" type="button">Singular</button>
+<button class="btn" data-preset="random" type="button">Random</button>
 </div>
-
 </div>
 
 <div class="panel">
-
 <h3>Animation</h3>
-
-<input
-id="stageSlider"
-type="range"
-min="0"
-max="3"
-step="0.01"
-value="3"
->
-
-<div class="animation-buttons">
-
-<button id="playBtn">
-▶ Play
-</button>
-
-<button id="resetBtn">
-↺ Reset
-</button>
+<div class="range-row">
+<input id="stageSlider" type="range" min="0" max="3" step="0.01" value="3">
+<output id="stageOut">3.00</output>
+</div>
+<div class="btn-row" style="margin-top:12px">
+<button id="playBtn" class="btn" type="button">▶ Play</button>
+<button id="resetBtn" class="btn" type="button">↺ Reset</button>
+</div>
+</div>
 
 </div>
 
+<div class="visualization">
+<div class="viz-toolbar">
+<span class="stage-label" id="stageText">Final Transformation</span>
+<button id="downloadGeoBtn" class="btn btn-sm" type="button">⬇ Download PNG</button>
+</div>
+<div class="canvas-wrap">
+<canvas id="canvas" width="1000" height="700"></canvas>
+</div>
+</div>
+
+</div>
+
+<section class="cards">
+<div class="card"><h3>U</h3><pre id="uCard"></pre></div>
+<div class="card"><h3>Σ</h3><pre id="sCard"></pre></div>
+<div class="card"><h3>Vᵀ</h3><pre id="vCard"></pre></div>
+</section>
+
+<section class="bars-card">
+<h2>Singular Values</h2>
+<div id="bars"></div>
+</section>
+
+<section class="explanation-card">
+<h2>What is happening?</h2>
+<p id="explanation"></p>
+</section>
+
+</section>
+
+<!-- ================= TAB 2: MATRIX LAB ================= -->
+<section id="tab-matrix" class="tab-panel">
+
+<h2 class="section-title">Decompose any matrix</h2>
+<p class="section-sub">Enter an m × n matrix and inspect its full SVD, singular value spectrum, and best rank-k approximation.</p>
+
+<div class="main-grid">
+
+<div class="sidebar">
+
+<div class="panel">
+<h3>Matrix size</h3>
+<div class="size-row">
+<input id="mlRows" type="number" min="1" max="8" value="4" class="mtx-input">
+<span style="color:var(--text-dim)">×</span>
+<input id="mlCols" type="number" min="1" max="8" value="3" class="mtx-input">
+<button id="mlResize" class="btn btn-sm" type="button">Resize</button>
+</div>
+</div>
+
+<div class="panel">
+<h3>Matrix values</h3>
+<textarea id="mlTextarea" class="mtx-textarea" spellcheck="false"></textarea>
+<div class="btn-row" style="margin-top:10px">
+<button id="mlApply" class="btn btn-primary btn-block" type="button">Compute SVD</button>
+</div>
+</div>
+
+<div class="panel">
+<h3>Presets</h3>
+<div class="preset-grid">
+<button class="btn" data-mpreset="random" type="button">Random</button>
+<button class="btn" data-mpreset="identity" type="button">Identity</button>
+<button class="btn" data-mpreset="lowrank" type="button">Low-rank</button>
+<button class="btn" data-mpreset="symmetric" type="button">Symmetric</button>
+</div>
 </div>
 
 </div>
 
 <div class="visualization">
 
-<canvas
-id="canvas"
-width="1000"
-height="700">
-</canvas>
+<div class="panel">
+<h3>Rank-k reconstruction</h3>
+<div class="range-row">
+<input id="mlRankSlider" type="range" min="1" max="1" step="1" value="1">
+<output id="mlRankOut">1</output>
+</div>
+<div class="stat-grid">
+<div class="stat"><div class="stat-value" id="mlStatRank">-</div><div class="stat-label">Rank used</div></div>
+<div class="stat"><div class="stat-value" id="mlStatEnergy">-</div><div class="stat-label">Energy captured</div></div>
+<div class="stat"><div class="stat-value" id="mlStatError">-</div><div class="stat-label">Frobenius error</div></div>
+<div class="stat"><div class="stat-value" id="mlStatCompression">-</div><div class="stat-label">Values stored</div></div>
+</div>
+</div>
 
-<div class="stage-label">
+<div class="panel">
+<h3>Original A</h3>
+<div class="table-scroll"><table class="mtx-table" id="mlTableA"></table></div>
+</div>
 
-<span id="stageText">
-Final Transformation
-</span>
-
+<div class="panel">
+<h3>Reconstruction Â_k</h3>
+<div class="table-scroll"><table class="mtx-table" id="mlTableRecon"></table></div>
 </div>
 
 </div>
 
 </div>
 
-<section class="cards">
-
-<div class="card">
-
-<h3>U</h3>
-
-<pre id="uCard"></pre>
-
-</div>
-
-<div class="card">
-
-<h3>Σ</h3>
-
-<pre id="sCard"></pre>
-
-</div>
-
-<div class="card">
-
-<h3>Vᵀ</h3>
-
-<pre id="vCard"></pre>
-
-</div>
-
+<section class="result-grid" style="margin-top:16px">
+<div class="card"><h3>U</h3><div class="table-scroll" id="mlU"></div></div>
+<div class="card"><h3>Σ (diag)</h3><div class="table-scroll" id="mlS"></div></div>
+<div class="card"><h3>Vᵀ</h3><div class="table-scroll" id="mlVT"></div></div>
 </section>
 
 <section class="bars-card">
-
-<h2>Singular Values</h2>
-
-<div id="bars"></div>
+<div class="viz-toolbar">
+<h2 style="margin:0">Singular value spectrum</h2>
+<div class="btn-row">
+<button id="mlDownloadChart" class="btn btn-sm" type="button">⬇ Chart PNG</button>
+<button id="mlDownloadData" class="btn btn-sm" type="button">⬇ Export JSON</button>
+</div>
+</div>
+<div class="chart-wrap"><canvas id="mlChart"></canvas></div>
+</section>
 
 </section>
 
-<section class="explanation-card">
+<!-- ================= TAB 3: IMAGE COMPRESSION ================= -->
+<section id="tab-image" class="tab-panel">
 
-<h2>What is happening?</h2>
+<h2 class="section-title">Compress an image with SVD</h2>
+<p class="section-sub">Upload a photo. Every image is a matrix — keep only its strongest singular values and watch it reconstruct.</p>
 
-<p id="explanation"></p>
+<div id="uploadZone" class="upload-zone">
+<div class="upload-icon">📷</div>
+<div class="upload-title">Drop an image here or tap to upload</div>
+<div class="upload-sub">JPG, PNG or WEBP · processed entirely on your device</div>
+<input id="fileInput" type="file" accept="image/*" class="hidden">
+</div>
+
+<div id="imageControls" class="image-controls hidden">
+
+<div class="field">
+<label class="field-label">Resolution</label>
+<select id="imgResolution">
+<option value="90">Fast (90px)</option>
+<option value="140" selected>Balanced (140px)</option>
+<option value="200">Detailed (200px)</option>
+</select>
+</div>
+
+<div class="field">
+<label class="field-label">Mode</label>
+<select id="imgMode">
+<option value="gray" selected>Grayscale</option>
+<option value="color">Color (RGB)</option>
+</select>
+</div>
+
+<div class="field">
+<label class="field-label">New image</label>
+<button id="imgReplaceBtn" class="btn btn-block" type="button">Choose another</button>
+</div>
+
+</div>
+
+<div id="imgStatus" class="status-line hidden">
+<div class="spinner"></div>
+<span id="imgStatusText">Computing SVD…</span>
+</div>
+
+<div id="imageResults" class="hidden">
+
+<div class="compare-grid">
+<div class="image-frame">
+<h4>Original <span id="imgOrigDims"></span></h4>
+<div class="image-canvas-wrap"><canvas id="imgOrigCanvas"></canvas></div>
+</div>
+<div class="image-frame">
+<h4>
+Reconstruction
+<button id="imgDownloadRecon" class="btn btn-sm" type="button">⬇ PNG</button>
+</h4>
+<div class="image-canvas-wrap"><canvas id="imgReconCanvas"></canvas></div>
+</div>
+</div>
+
+<div class="panel" style="margin-top:16px">
+<h3>Rank (number of singular values kept)</h3>
+<div class="range-row">
+<input id="imgRankSlider" type="range" min="1" max="1" step="1" value="1">
+<output id="imgRankOut">1</output>
+</div>
+<div class="stat-grid">
+<div class="stat"><div class="stat-value" id="imgStatRank">-</div><div class="stat-label">Rank k</div></div>
+<div class="stat"><div class="stat-value" id="imgStatEnergy">-</div><div class="stat-label">Energy captured</div></div>
+<div class="stat"><div class="stat-value" id="imgStatStorage">-</div><div class="stat-label">Storage used</div></div>
+<div class="stat"><div class="stat-value" id="imgStatRatio">-</div><div class="stat-label">Compression ratio</div></div>
+</div>
+</div>
+
+<section class="bars-card">
+<div class="viz-toolbar">
+<h2 style="margin:0">Singular value spectrum (log scale)</h2>
+<button id="imgDownloadChart" class="btn btn-sm" type="button">⬇ Chart PNG</button>
+</div>
+<div class="chart-wrap"><canvas id="imgChart"></canvas></div>
+</section>
+
+<section class="bars-card">
+<h2>First rank-1 "eigen images"</h2>
+<p class="section-sub" style="margin-bottom:0">Each tile is one singular triplet σᵢ·uᵢ·vᵢᵀ rendered on its own — the building blocks SVD adds together to reconstruct the photo.</p>
+<div class="gallery" id="imgGallery"></div>
+</section>
+
+</div>
 
 </section>
 
-<script src="script.js"></script>
+</main>
+
+<footer>
+Built with HTML, CSS, vanilla JavaScript &amp; <a href="https://github.com/sloisel/numeric" target="_blank" rel="noopener">numeric.js</a> ·
+<a href="https://github.com/Aashikshahriar/svd_visualizer" target="_blank" rel="noopener">Source on GitHub</a>
+</footer>
+
+<div id="toast" class="toast"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/geometry.js"></script>
+<script src="js/matrixLab.js"></script>
+<script src="js/imageLab.js"></script>
+<script src="js/app.js"></script>
 
 </body>
 </html>
